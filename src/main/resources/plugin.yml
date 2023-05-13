@@ -1,0 +1,6 @@
+name: Chest-Winkel
+version: '${version}'
+main: org.super_man2006.chestwinkel.ChestWinkel
+api-version: 1.19
+depend: [Geld-API]
+loadafter: [Geld-API]
