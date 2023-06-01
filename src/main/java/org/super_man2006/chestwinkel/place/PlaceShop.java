@@ -64,7 +64,7 @@ public class PlaceShop implements Listener {
 
         }
 
-        if (!(barrelBlock.getType() == Material.BARREL)) {
+        if (!(barrelBlock.getType() == Material.BARREL) || ChestWinkel.unbreakable.contains(barrelBlock.getLocation())) {
             return;
         }
 
