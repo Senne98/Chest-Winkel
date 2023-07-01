@@ -9,7 +9,12 @@
         <a href="https://legacy.curseforge.com/minecraft/bukkit-plugins/chest-winkel">
         <img src="https://img.shields.io/badge/-available_on_CurseForge-ce6d31?logo=curseforge&style=flat" /></a>
   </p>
-
+   </p>
+<p align="center">
+    <a href="https://discord.gg/DBabnRZAhC" alt="join_Discord">
+        <img src="https://img.shields.io/badge/-join_Discord-blue?logo=discord&style=flat&logoColor=white" /></a>
+  </p>
+  
 # Chest Winkel  
 Chest winkel is a chest shop plugin that uses display entities to display the contents of a shop without impacting performance.
 
