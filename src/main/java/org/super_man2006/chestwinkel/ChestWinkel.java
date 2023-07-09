@@ -28,6 +28,10 @@ public final class ChestWinkel extends JavaPlugin {
         getServer().sendMessage(Component.text("[Chest-Winkel] ").append(
                 Component.text("enabling plugin" , NamedTextColor.GREEN)));
 
+        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = 19041; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+
         //resources
         shopsFileStatic = shopsFile;
         if(!shopsFile.exists()) {

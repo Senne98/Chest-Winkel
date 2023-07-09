@@ -133,5 +133,8 @@ public class PlaceShop implements Listener {
         ChestWinkel.shopList.add(shop);
         ChestWinkel.unbreakable.add(shop.getSignLocation());
         ChestWinkel.unbreakable.add(shop.getLocation());
+
+        sign.setEditable(false);
+        sign.update();
     }
 }
