@@ -20,7 +20,6 @@ import org.super_man2006.chestwinkel.ChestWinkel;
 import org.super_man2006.chestwinkel.data.Shop;
 import org.super_man2006.geldapi.test.IsInt;
 
-import javax.xml.crypto.dsig.Transform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,5 +133,8 @@ public class PlaceShop implements Listener {
         ChestWinkel.shopList.add(shop);
         ChestWinkel.unbreakable.add(shop.getSignLocation());
         ChestWinkel.unbreakable.add(shop.getLocation());
+
+        sign.setEditable(false);
+        sign.update();
     }
 }
