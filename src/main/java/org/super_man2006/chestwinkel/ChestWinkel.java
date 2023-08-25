@@ -1,17 +1,20 @@
 package org.super_man2006.chestwinkel;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.super_man2006.chestwinkel.data.LoadSave;
-import org.super_man2006.chestwinkel.data.Shop;
-import org.super_man2006.chestwinkel.gui.ShopOwnerGui;
-import org.super_man2006.chestwinkel.interact.FillShop;
-import org.super_man2006.chestwinkel.interact.OpenShop;
-import org.super_man2006.chestwinkel.place.PlaceShop;
-import org.super_man2006.chestwinkel.interact.DestroyShop;
+import org.super_man2006.chestwinkel.updateFiles.Update;
+import org.super_man2006.chestwinkel.utils.LoadSave;
+import org.super_man2006.chestwinkel.shop.Shop;
+import org.super_man2006.chestwinkel.shop.interact.ShopOwnerGui;
+import org.super_man2006.chestwinkel.shop.interact.FillShop;
+import org.super_man2006.chestwinkel.shop.interact.OpenShop;
+import org.super_man2006.chestwinkel.shop.place.CurrencyList;
+import org.super_man2006.chestwinkel.shop.place.PlaceShop;
+import org.super_man2006.chestwinkel.shop.interact.DestroyShop;
+import org.super_man2006.chestwinkel.shop.place.SelectCurrencyClick;
+import org.super_man2006.geldapi.Geld_API;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,29 +23,43 @@ import java.util.List;
 public final class ChestWinkel extends JavaPlugin {
 
     public static List<Shop> shopList = new ArrayList<>();
-    public static List<Location> unbreakable = new ArrayList<>();
+    public static List<NamespacedKey> currencys = new ArrayList<>();
+    public static ChestWinkel plugin;
+    public static String unbreakableKey = "unbreakable";
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getServer().sendMessage(Component.text("[Chest-Winkel] ").append(
-                Component.text("enabling plugin" , NamedTextColor.GREEN)));
+        plugin = this;
 
         // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
         int pluginId = 19041; // <-- Replace with the id of your plugin!
         Metrics metrics = new Metrics(this, pluginId);
 
         //resources
-        shopsFileStatic = shopsFile;
-        if(!shopsFile.exists()) {
-            saveResource("Shops.json", false);
-            Component logText = Component.text("[Chest-Winkel] generated Shops.json");
-            getServer().sendMessage(logText);
+        Geld_API.currencyList.forEach((namespacedKey, currency) -> currencys.add(namespacedKey));
+
+        settingsFile = new File(getDataFolder(), "settings.json");
+        versionFile = new File(getDataFolder(), "version.txt");
+        shopsFile = new File(getDataFolder(), "Shops.json");
+
+        saveResource("settings.json", false);
+        Settings.load();
+
+        if (!versionFile.exists()) {
+            saveResource("version.txt", false);
+            if (shopsFile.exists()) {
+                ConfigurationSerialization.registerClass(org.super_man2006.chestwinkel.updateFiles.Shop.class, "org.super_man2006.chestwinkel.data.Shop");
+                Update.update();
+            } else {
+                saveResource("Shops.json", false);
+            }
         } else {
-            //load shops
             ConfigurationSerialization.registerClass(Shop.class);
             LoadSave.load();
         }
+
+        Geld_API.currencyList.forEach((namespacedKey, currency) -> currencys.add(namespacedKey));
 
         //Events
         getServer().getPluginManager().registerEvents(new PlaceShop(), this);
@@ -50,27 +67,18 @@ public final class ChestWinkel extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OpenShop(), this);
         getServer().getPluginManager().registerEvents(new ShopOwnerGui(), this);
         getServer().getPluginManager().registerEvents(new FillShop(), this);
-
-        getServer().sendMessage(Component.text("[Chest-Winkel] ").append(
-                Component.text("plugin enabled" , NamedTextColor.GREEN)));
+        getServer().getPluginManager().registerEvents(new CurrencyList(), this);
+        getServer().getPluginManager().registerEvents(new SelectCurrencyClick(), this);
     }
-
-    private File shopsFile = new File(getDataFolder(), "Shops.json");
-    public File getShopsFile() {
-        return shopsFile;
-    }
-    public static File shopsFileStatic;
+    public static File shopsFile;
+    public static File versionFile;
+    public static File settingsFile;
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        getServer().sendMessage(Component.text("[Chest-Winkel] ").append(
-                Component.text("disabling plugin" , NamedTextColor.RED)));
 
         //save shops
         LoadSave.save();
-
-        getServer().sendMessage(Component.text("[Chest-Winkel] ").append(
-                Component.text("plugin disabled" , NamedTextColor.RED)));
     }
 }

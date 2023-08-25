@@ -1,4 +1,4 @@
-package org.super_man2006.chestwinkel.gui;
+package org.super_man2006.chestwinkel.shop.interact;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,8 +13,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.super_man2006.chestwinkel.ChestWinkel;
-import org.super_man2006.chestwinkel.data.Shop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,22 @@ public class ShopOwnerGui implements InventoryHolder, Listener {
         if (slot == 4) {
             Location barrelLoc = ChestWinkel.shopList.get(shopNum).getLocation();
             Location signLoc = ChestWinkel.shopList.get(shopNum).getSignLocation();
-            ChestWinkel.shopList.get(shopNum).getItemDisplay().remove();
+            e.getWhoClicked().getWorld().getEntity(ChestWinkel.shopList.get(shopNum).getItemDisplay()).remove();
             ChestWinkel.shopList.remove(shopNum);
-            ChestWinkel.unbreakable.remove(barrelLoc);
-            ChestWinkel.unbreakable.remove(signLoc);
+
+            PersistentDataContainer data = barrelLoc.getChunk().getPersistentDataContainer();
+            data.remove(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(barrelLoc.getBlockX()) + String.valueOf(barrelLoc.getBlockY()) + String.valueOf(barrelLoc.getBlockZ())));
+            data.remove(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(signLoc.getBlockX()) + String.valueOf(signLoc.getBlockY()) + String.valueOf(signLoc.getBlockZ())));
+
+            PersistentDataContainer playerData = player.getPersistentDataContainer();
+
+            if (playerData.has(new NamespacedKey(ChestWinkel.plugin, "ChestShopAmount"), PersistentDataType.INTEGER)) {
+                int previous = playerData.get(new NamespacedKey(ChestWinkel.plugin, "ChestShopAmount"), PersistentDataType.INTEGER);
+                if (previous != 0) {
+                    playerData.set(new NamespacedKey(ChestWinkel.plugin, "ChestShopAmount"), PersistentDataType.INTEGER, previous - 1);
+                }
+            }
+
             player.breakBlock(block);
             player.closeInventory();
         }

@@ -1,14 +1,12 @@
-package org.super_man2006.chestwinkel.interact;
+package org.super_man2006.chestwinkel.shop.interact;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.super_man2006.chestwinkel.data.ActiveShops;
-import org.super_man2006.chestwinkel.data.Shop;
+import org.super_man2006.chestwinkel.shop.Shop;
 
 import java.util.Objects;
 
@@ -25,10 +23,10 @@ public class FillShop implements Listener {
             return;
         }
 
-        if (!ActiveShops.contains(loc)) {
+        if (!Shop.isShop(loc)) {
             return;
         }
-        Shop shop = ActiveShops.getShop(loc);
+        Shop shop = Shop.getShop(loc);
         if (!Objects.equals(loc.toString(), shop.getLocation().toString())) {
             return;
         }

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.super_man2006'
-version = '4.0-SNAPSHOT'
+version = '5.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT"
-    compileOnly "org.super_man2006.geldapi:Geld-API:1.0-SNAPSHOT"
+    compileOnly "org.super_man2006.geldapi:Geld-API:4.0-SNAPSHOT"
 }
 
 def targetJavaVersion = 17
@@ -40,6 +40,11 @@ tasks.withType(JavaCompile).configureEach {
         options.release = targetJavaVersion
     }
 }
+
+tasks.withType (JavaCompile) {
+    options.incremental = false;
+}
+
 
 processResources {
     def props = [version: version]

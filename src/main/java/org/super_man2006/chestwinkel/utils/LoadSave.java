@@ -1,4 +1,4 @@
-package org.super_man2006.chestwinkel.data;
+package org.super_man2006.chestwinkel.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,7 +8,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.Bukkit;
 import org.super_man2006.chestwinkel.ChestWinkel;
-import org.super_man2006.geldapi.tools.Base64;
+import org.super_man2006.chestwinkel.shop.Shop;
+import org.super_man2006.geldapi.utils.Base64;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class LoadSave {
     private static File file;
 
     public static void file() {
-        file = ChestWinkel.shopsFileStatic;
+        file = ChestWinkel.shopsFile;
     }
 
     public static void save(){
@@ -63,8 +64,6 @@ public class LoadSave {
             for (int i = 0; i < base64List.size(); i++) {
                 Shop shop = (Shop) Base64.decode(base64List.get(i));
                 ChestWinkel.shopList.add(shop);
-                ChestWinkel.unbreakable.add(shop.getLocation());
-                ChestWinkel.unbreakable.add(shop.getSignLocation());
             }
 
         } catch (FileNotFoundException e) {
