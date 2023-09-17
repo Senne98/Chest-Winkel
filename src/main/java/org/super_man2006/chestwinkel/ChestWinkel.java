@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.super_man2006.chestwinkel.updateFiles.Update;
 import org.super_man2006.chestwinkel.utils.LoadSave;
 import org.super_man2006.chestwinkel.shop.Shop;
@@ -69,6 +70,16 @@ public final class ChestWinkel extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FillShop(), this);
         getServer().getPluginManager().registerEvents(new CurrencyList(), this);
         getServer().getPluginManager().registerEvents(new SelectCurrencyClick(), this);
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                LoadSave.save();
+            }
+        };
+
+        if (Settings.doAutoSave) {
+            runnable.runTaskTimer(this, Settings.autoSave, Settings.autoSave);
+        }
     }
     public static File shopsFile;
     public static File versionFile;

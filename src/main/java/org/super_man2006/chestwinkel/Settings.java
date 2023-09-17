@@ -12,12 +12,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
-import java.util.List;
 
 public class Settings {
 
     public static int shopLimit;
     public static boolean allowChests;
+    public static boolean doAutoSave;
+    public static int autoSave;
 
     public static void load() {
         File file = ChestWinkel.settingsFile;
@@ -29,7 +30,7 @@ public class Settings {
             JsonReader reader = new JsonReader(new FileReader(file));
             HashMap<String, String> settings;
             JsonElement element = gson.fromJson(reader, JsonElement.class);
-            settings = gson.fromJson(element, new TypeToken<List<String>>(){}.getType());
+            settings = gson.fromJson(element, new TypeToken<HashMap<String, String>>(){}.getType());
 
             if (settings == null) {
                 return;
@@ -49,6 +50,19 @@ public class Settings {
                 allowChests = Boolean.parseBoolean(settings.get("allow_chests"));
             } else {
                 allowChests = false;
+            }
+
+            if (settings.containsKey("save_timer") && IsInt.IsInt(settings.get("save_timer").toLowerCase())) {
+                int temp = Integer.parseInt(settings.get("save_timer").toLowerCase());
+                if (temp < 1) {
+                    doAutoSave = false;
+                } else {
+                    doAutoSave = true;
+                    autoSave = temp * 20 * 60;
+                }
+            } else {
+                doAutoSave = true;
+                autoSave = 6000;
             }
 
         } catch (FileNotFoundException e) {
