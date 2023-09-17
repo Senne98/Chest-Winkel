@@ -4,15 +4,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.super_man2006.chestwinkel.shop.interact.*;
 import org.super_man2006.chestwinkel.updateFiles.Update;
 import org.super_man2006.chestwinkel.utils.LoadSave;
 import org.super_man2006.chestwinkel.shop.Shop;
-import org.super_man2006.chestwinkel.shop.interact.ShopOwnerGui;
-import org.super_man2006.chestwinkel.shop.interact.FillShop;
-import org.super_man2006.chestwinkel.shop.interact.OpenShop;
 import org.super_man2006.chestwinkel.shop.place.CurrencyList;
 import org.super_man2006.chestwinkel.shop.place.PlaceShop;
-import org.super_man2006.chestwinkel.shop.interact.DestroyShop;
 import org.super_man2006.chestwinkel.shop.place.SelectCurrencyClick;
 import org.super_man2006.geldapi.Geld_API;
 
@@ -37,7 +35,7 @@ public final class ChestWinkel extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         //resources
-        Geld_API.currencyList.forEach((namespacedKey, currency) -> currencys.add(namespacedKey));
+        // Geld_API.currencyList.forEach((namespacedKey, currency) -> currencys.add(namespacedKey));
 
         settingsFile = new File(getDataFolder(), "settings.json");
         versionFile = new File(getDataFolder(), "version.txt");
@@ -63,12 +61,22 @@ public final class ChestWinkel extends JavaPlugin {
 
         //Events
         getServer().getPluginManager().registerEvents(new PlaceShop(), this);
+        getServer().getPluginManager().registerEvents(new MakeDouble(), this);
         getServer().getPluginManager().registerEvents(new DestroyShop(), this);
         getServer().getPluginManager().registerEvents(new OpenShop(), this);
         getServer().getPluginManager().registerEvents(new ShopOwnerGui(), this);
         getServer().getPluginManager().registerEvents(new FillShop(), this);
         getServer().getPluginManager().registerEvents(new CurrencyList(), this);
         getServer().getPluginManager().registerEvents(new SelectCurrencyClick(), this);
+
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                LoadSave.save();
+            }
+        };
+
+        runnable.runTaskTimer(this, 720000, 720000);
     }
     public static File shopsFile;
     public static File versionFile;

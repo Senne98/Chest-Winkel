@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id("io.papermc.paperweight.userdev") version("1.5.5")
+    id("xyz.jpenilla.run-paper") version "2.1.0"
 }
 
 group = 'org.super_man2006'
@@ -22,6 +24,7 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT"
+    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
     compileOnly "org.super_man2006.geldapi:Geld-API:4.0-SNAPSHOT"
 }
 

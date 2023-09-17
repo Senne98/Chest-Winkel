@@ -29,7 +29,7 @@ public class Settings {
             JsonReader reader = new JsonReader(new FileReader(file));
             HashMap<String, String> settings;
             JsonElement element = gson.fromJson(reader, JsonElement.class);
-            settings = gson.fromJson(element, new TypeToken<List<String>>(){}.getType());
+            settings = gson.fromJson(element, new TypeToken<HashMap<String, String>>(){}.getType());
 
             if (settings == null) {
                 return;
