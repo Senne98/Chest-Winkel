@@ -90,8 +90,22 @@ public class PlaceShop implements Listener {
             return;
         }
 
-        Barrel barrel = (Barrel) barrelBlock.getState();
-        Inventory inv = barrel.getInventory();
+        Inventory inv;
+        if (barrelBlock.getState() instanceof Barrel) {
+            Barrel barrel = (Barrel) barrelBlock.getState();
+            inv = barrel.getInventory();
+        } else if (barrelBlock.getState() instanceof Chest) {
+            Chest chest = (Chest) barrelBlock.getState();
+
+            if (chest.getInventory().getSize() == 54) {
+                return;
+            }
+
+            inv = chest.getInventory();
+        } else {
+            return;
+        }
+
         ItemStack[] invList = inv.getContents();
         List<ItemStack> invArray = new ArrayList<>();
         for (int i = 0; i < invList.length; i++) {
