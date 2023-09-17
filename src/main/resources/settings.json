@@ -1,3 +1,4 @@
 {
-  "shop_limit": -1
+  "shop_limit": "-1",
+  "allow_chests" : "true"
 }
