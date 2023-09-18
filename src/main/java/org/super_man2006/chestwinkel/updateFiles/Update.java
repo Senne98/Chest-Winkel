@@ -9,6 +9,7 @@ import org.super_man2006.chestwinkel.ChestWinkel;
 import org.super_man2006.chestwinkel.utils.Coordinate;
 import org.super_man2006.chestwinkel.utils.CoordinateDataType;
 import org.super_man2006.chestwinkel.utils.LoadSave;
+import org.super_man2006.geldapi.Geld_API;
 import org.super_man2006.geldapi.currency.Currency;
 
 import java.io.FileNotFoundException;
@@ -34,27 +35,14 @@ public class Update {
             }
 
             ChestWinkel.plugin.saveResource("Shops.json", false);
+            ConfigurationSerialization.registerClass(org.super_man2006.chestwinkel.shop.Shop.class);
+            LoadSave.load();
             writeVersion();
             return;
 
         }
 
-        try {
-            List<String> lines = FileUtils.readLines(ChestWinkel.versionFile, Charset.defaultCharset());
-            String version = lines.get(0);
-
-            if (Objects.equals(version, "5.0-SNAPSHOT") || Objects.equals(version, "6.0")) {
-
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        ConfigurationSerialization.registerClass(org.super_man2006.chestwinkel.shop.Shop.class);
-            LoadSave.load();
+        updateV2();
     }
 
     private static void writeVersion() {
@@ -75,23 +63,22 @@ public class Update {
         ConfigurationSerialization.registerClass(ShopV1.class, "org.super_man2006.chestwinkel.data.Shop");
         LoadSaveOld.loadV1();
 
-        if (!shopV1List.isEmpty()) {
-            shopV1List.forEach(shopOld -> {
-                PersistentDataContainer data = shopOld.getLocation().getChunk().getPersistentDataContainer();
-                Location loc = shopOld.getLocation();
-                Location signLoc = shopOld.getSignLocation();
-                data.set(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(loc.getBlockX()) + String.valueOf(loc.getBlockY()) + String.valueOf(loc.getBlockZ())), new CoordinateDataType(), new Coordinate(loc));
-                data.set(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(signLoc.getBlockX()) + String.valueOf(signLoc.getBlockY()) + String.valueOf(signLoc.getBlockZ())), new CoordinateDataType(), new Coordinate(signLoc));
+        for (int i = 0; i < shopV1List.size(); i++) {
+            ShopV1 shopOld = shopV1List.get(i);
+            PersistentDataContainer data = shopOld.getLocation().getChunk().getPersistentDataContainer();
+            Location loc = shopOld.getLocation();
+            Location signLoc = shopOld.getSignLocation();
+            data.set(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(loc.getBlockX()) + String.valueOf(loc.getBlockY()) + String.valueOf(loc.getBlockZ())), new CoordinateDataType(), new Coordinate(loc));
+            data.set(new NamespacedKey(ChestWinkel.plugin, ChestWinkel.unbreakableKey + String.valueOf(signLoc.getBlockX()) + String.valueOf(signLoc.getBlockY()) + String.valueOf(signLoc.getBlockZ())), new CoordinateDataType(), new Coordinate(signLoc));
 
-                ShopV2 shop = new ShopV2(shopOld, Currency.Currency(ChestWinkel.currencys.get(0)));
-            });
+            new ShopV2(shopOld, Currency.Currency(new NamespacedKey("geld-api", "coins")));
         }
 
         writeVersion();
     }
 
     private static void updateV2() {
-        ConfigurationSerialization.registerClass(ShopV2.class, "org.super_man2006.chestwinkel.shop");
+        ConfigurationSerialization.registerClass(ShopV2.class, "org.super_man2006.chestwinkel.shop.Shop");
         LoadSaveOld.loadV2();
 
         if (!shopV2List.isEmpty()) {

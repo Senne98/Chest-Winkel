@@ -1,4 +1,5 @@
 {
   "shop_limit": "-1",
-  "allow_chests" : "true"
+  "allow_chests" : "false",
+  "save_timer" : "5"
 }
