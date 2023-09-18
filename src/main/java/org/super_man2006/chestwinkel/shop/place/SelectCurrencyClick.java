@@ -55,7 +55,16 @@ public class SelectCurrencyClick implements Listener {
             sign.setEditable(false);
             sign.update();
 
-            new Shop(loc.toLocation(world), signLoc.toLocation(world), item, amount, price, owner, itemDisplay, currency);
+            if (e.getWhoClicked().getPersistentDataContainer().has(new NamespacedKey(ChestWinkel.plugin, "InfiniteChestPermission"))) {
+                if (e.getWhoClicked().getPersistentDataContainer().get(new NamespacedKey(ChestWinkel.plugin, "InfiniteChestPermission"), PersistentDataType.BOOLEAN) && e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) {
+                    new Shop(loc.toLocation(world), signLoc.toLocation(world), item, amount, price, owner, itemDisplay, currency, true);
+                }
+                new Shop(loc.toLocation(world), signLoc.toLocation(world), item, amount, price, owner, itemDisplay, currency, false);
+
+            } else {
+                new Shop(loc.toLocation(world), signLoc.toLocation(world), item, amount, price, owner, itemDisplay, currency, false);
+
+            }
             e.getWhoClicked().closeInventory();
             return;
         }

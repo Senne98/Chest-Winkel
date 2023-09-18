@@ -1,11 +1,10 @@
 package org.super_man2006.chestwinkel;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.super_man2006.chestwinkel.permission.AddPermission;
 import org.super_man2006.chestwinkel.shop.interact.*;
-import org.super_man2006.chestwinkel.updateFiles.ShopV1;
 import org.super_man2006.chestwinkel.updateFiles.Update;
 import org.super_man2006.chestwinkel.utils.LoadSave;
 import org.super_man2006.chestwinkel.shop.Shop;
@@ -44,18 +43,7 @@ public final class ChestWinkel extends JavaPlugin {
         saveResource("settings.json", false);
         Settings.load();
 
-        if (!versionFile.exists()) {
-            saveResource("version.txt", false);
-            if (shopsFile.exists()) {
-                ConfigurationSerialization.registerClass(ShopV1.class, "org.super_man2006.chestwinkel.data.Shop");
-                Update.update();
-            } else {
-                saveResource("Shops.json", false);
-            }
-        } else {
-            ConfigurationSerialization.registerClass(Shop.class);
-            LoadSave.load();
-        }
+        Update.update();
 
         Geld_API.currencyList.forEach((namespacedKey, currency) -> currencys.add(namespacedKey));
 
@@ -68,6 +56,10 @@ public final class ChestWinkel extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FillShop(), this);
         getServer().getPluginManager().registerEvents(new CurrencyList(), this);
         getServer().getPluginManager().registerEvents(new SelectCurrencyClick(), this);
+
+        //commands
+        getCommand("InfiniteChestPermission").setExecutor(new AddPermission());
+        getCommand("InfiniteChestPermission").setTabCompleter(new AddPermission());
 
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override

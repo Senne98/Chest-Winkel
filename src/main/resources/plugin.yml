@@ -4,3 +4,7 @@ main: org.super_man2006.chestwinkel.ChestWinkel
 api-version: 1.19
 depend: [Geld-API]
 loadafter: [Geld-API]
+commands:
+  InfiniteChestPermission:
+    description: "add InfiniteChestPermission"
+    usage: "/InfiniteChestPermission <add/remove> <player>"
