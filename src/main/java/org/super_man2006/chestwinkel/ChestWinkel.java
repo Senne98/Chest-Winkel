@@ -1,11 +1,11 @@
 package org.super_man2006.chestwinkel;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.super_man2006.chestwinkel.shop.interact.*;
+import org.super_man2006.chestwinkel.updateFiles.ShopV1;
 import org.super_man2006.chestwinkel.updateFiles.Update;
 import org.super_man2006.chestwinkel.utils.LoadSave;
 import org.super_man2006.chestwinkel.shop.Shop;
@@ -47,7 +47,7 @@ public final class ChestWinkel extends JavaPlugin {
         if (!versionFile.exists()) {
             saveResource("version.txt", false);
             if (shopsFile.exists()) {
-                ConfigurationSerialization.registerClass(org.super_man2006.chestwinkel.updateFiles.Shop.class, "org.super_man2006.chestwinkel.data.Shop");
+                ConfigurationSerialization.registerClass(ShopV1.class, "org.super_man2006.chestwinkel.data.Shop");
                 Update.update();
             } else {
                 saveResource("Shops.json", false);

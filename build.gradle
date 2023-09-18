@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.super_man2006'
-version = '6.0'
+version = '7.0'
 
 repositories {
     mavenCentral()

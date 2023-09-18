@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Deprecated
-public class Shop implements ConfigurationSerializable {
+public class ShopV1 implements ConfigurationSerializable {
         private Location location;
         private Location signLocation;
         private Material item;
@@ -65,11 +65,11 @@ public class Shop implements ConfigurationSerializable {
             return data;
         }
 
-    public static Shop deserialize(Map<String, Object> data) {
-        return new Shop(data);
+    public static ShopV1 deserialize(Map<String, Object> data) {
+        return new ShopV1(data);
     }
 
-    public Shop(Map<String, Object> data) {
+    public ShopV1(Map<String, Object> data) {
          this.location = (Location) data.get("location");
          this.signLocation = (Location) data.get("signLocation");
          this.item = (Material) data.get("item");
