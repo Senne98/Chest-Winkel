@@ -13,6 +13,7 @@ import org.super_man2006.geldapi.Geld_API;
 import org.super_man2006.geldapi.currency.Currency;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -36,13 +37,14 @@ public class Update {
 
             ChestWinkel.plugin.saveResource("Shops.json", false);
             ConfigurationSerialization.registerClass(org.super_man2006.chestwinkel.shop.Shop.class);
-            LoadSave.load();
             writeVersion();
             return;
 
         }
 
-        updateV2();
+        if (Objects.equals(getVersion(), "5.0-SNAPSHOT") || Objects.equals(getVersion(), "6.0")) updateV2();
+
+        LoadSave.load();
     }
 
     private static void writeVersion() {
@@ -53,6 +55,20 @@ public class Update {
 
             writer.write(version);
             writer.flush();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String getVersion() {
+        try {
+            List<String> versionFile = FileUtils.readLines(ChestWinkel.versionFile, Charset.defaultCharset());
+
+            if (versionFile == null) return null;
+            if (versionFile.size() < 1) return null;
+
+            return versionFile.get(0);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

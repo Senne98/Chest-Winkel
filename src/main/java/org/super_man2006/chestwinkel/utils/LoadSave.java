@@ -51,11 +51,11 @@ public class LoadSave {
         file();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         if(!file.canRead()) { return; }
+
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
             List<String> base64List;
-            JsonElement element = gson.fromJson(reader, JsonElement.class);
-            base64List = gson.fromJson(element, new TypeToken<List<String>>(){}.getType());
+            base64List = gson.fromJson(reader, new TypeToken<List<String>>(){}.getType());
 
             if (base64List == null) {
                 return;
